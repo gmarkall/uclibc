@@ -34,7 +34,7 @@ __asm__(
     "   ; skip the extra args calc by dl_start()                \n"
     "   ld_s    r1, [sp]       ; orig argc from aux-vec Tbl     \n"
 
-#ifdef __UCLIBC_HAS_THREADS_NATIVE__
+#ifdef ARC_HAS_AT_PCL_RELOC
     "   ld      r12, [pcl, _dl_skip_args@pcl]                   \n"
 
     "   add     r2, pcl, _dl_fini@pcl       ; finalizer         \n"

@@ -507,9 +507,11 @@ ifeq ($(TARGET_ARCH),c6x)
 endif
 
 ifeq ($(TARGET_ARCH),arc)
+	ARC_HAS_AT_PCL_RELOC:=$(shell echo -e "\t.text\n\tadd r0,pcl,_symbol@pcl" | $(CC) -c -x assembler -o /dev/null -  2> /dev/null && echo -n y || echo -n n)
 	CPU_CFLAGS-y += -mlock -mswape
 	CPU_CFLAGS-$(CONFIG_ARC_CPU_700) += -mA7
 	CPU_CFLAGS-$(CONFIG_ARC_CPU_HS) += -mcpu=archs
+	CPU_CFLAGS-$(ARC_HAS_AT_PCL_RELOC) += -DARC_HAS_AT_PCL_RELOC
 	CPU_LDFLAGS-y += $(CPU_CFLAGS) -marclinux
 endif
 
