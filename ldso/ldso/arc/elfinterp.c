@@ -96,7 +96,9 @@ _dl_do_reloc(struct elf_resolve *tpnt, struct r_scope_elem *scope,
 	unsigned long old_val = 0;
 #endif
 	struct symbol_ref sym_ref;
+#if defined USE_TLS && USE_TLS
 	struct elf_resolve *tls_tpnt = NULL;
+#endif
 
 	reloc_addr   = (unsigned long *)(tpnt->loadaddr + rpnt->r_offset);
 	reloc_type   = ELF_R_TYPE(rpnt->r_info);
@@ -129,7 +131,9 @@ _dl_do_reloc(struct elf_resolve *tpnt, struct r_scope_elem *scope,
 			return 1;
 		}
 
+#if defined USE_TLS && USE_TLS
 		tls_tpnt = sym_ref.tpnt;
+#endif
 	} else if (reloc_type == R_ARC_RELATIVE ) {
 		*reloc_addr += tpnt->loadaddr;
 		goto log_entry;
@@ -232,7 +236,9 @@ static int _dl_parse(struct elf_resolve *tpnt, struct r_scope_elem *scope,
 	char *strtab;
 	ElfW(Sym) *symtab;
 	ELF_RELOC *rpnt;
+#if defined __SUPPORT_LD_DEBUG__
 	int symtab_index;
+#endif
 	int res = 0;
 
 	/* Now parse the relocation information */
@@ -244,10 +250,12 @@ static int _dl_parse(struct elf_resolve *tpnt, struct r_scope_elem *scope,
 
 	for (i = 0; i < rel_size; i++, rpnt++) {
 
+#if defined __SUPPORT_LD_DEBUG__
 		symtab_index = ELF_R_SYM(rpnt->r_info);
 
 		debug_sym(symtab,strtab,symtab_index);
 		debug_reloc(symtab,strtab,rpnt);
+#endif
 
 		/* constant propagation subsumes the 'if' */
 		if (type == ___DO_LAZY)

@@ -294,36 +294,36 @@ DL_START(unsigned long args)
 			{
 				ELF_RELOC *rpnt;
 				unsigned int i;
-				ElfW(Sym) *sym;
-				unsigned long symbol_addr;
-				int symtab_index;
+				//ElfW(Sym) *sym;
+				//unsigned long symbol_addr;
+				//int symtab_index;
 				unsigned long *reloc_addr;
 
 				/* Now parse the relocation information */
 				rpnt = (ELF_RELOC *) rel_addr;
 				for (i = 0; i < rel_size; i += sizeof(ELF_RELOC), rpnt++) {
 					reloc_addr = (unsigned long *) DL_RELOC_ADDR(load_addr, (unsigned long)rpnt->r_offset);
-					symtab_index = ELF_R_SYM(rpnt->r_info);
-					symbol_addr = 0;
-					sym = NULL;
-					if (symtab_index) {
-						char *strtab;
-						ElfW(Sym) *symtab;
+					//symtab_index = ELF_R_SYM(rpnt->r_info);
+					//symbol_addr = 0;
+					//sym = NULL;
+					//if (symtab_index) {
+						//char *strtab;
+						//ElfW(Sym) *symtab;
 
-						symtab = (ElfW(Sym) *) tpnt->dynamic_info[DT_SYMTAB];
-						strtab = (char *) tpnt->dynamic_info[DT_STRTAB];
-						sym = &symtab[symtab_index];
-						symbol_addr = (unsigned long) DL_RELOC_ADDR(load_addr, sym->st_value);
-#if !defined(EARLY_STDERR_SPECIAL)
-						SEND_STDERR_DEBUG("relocating symbol: ");
-						SEND_STDERR_DEBUG(strtab + sym->st_name);
-						SEND_STDERR_DEBUG("\n");
-#endif
-					} else {
+						//symtab = (ElfW(Sym) *) tpnt->dynamic_info[DT_SYMTAB];
+						//strtab = (char *) tpnt->dynamic_info[DT_STRTAB];
+						//sym = &symtab[symtab_index];
+						//symbol_addr = (unsigned long) DL_RELOC_ADDR(load_addr, sym->st_value);
+//#if !defined(EARLY_STDERR_SPECIAL)
+//						SEND_STDERR_DEBUG("relocating symbol: ");
+//						SEND_STDERR_DEBUG(strtab + sym->st_name);
+//						SEND_STDERR_DEBUG("\n");
+//#endif
+					//} else {
 						SEND_STDERR_DEBUG("relocating unknown symbol\n");
-					}
+					//}
 					/* Use this machine-specific macro to perform the actual relocation.  */
-					PERFORM_BOOTSTRAP_RELOC(rpnt, reloc_addr, symbol_addr, load_addr, sym);
+					PERFORM_BOOTSTRAP_RELOC(rpnt, reloc_addr, NULL, load_addr, NULL);
 				}
 			}
 #else /* ARCH_NEEDS_BOOTSTRAP_RELOCS */
